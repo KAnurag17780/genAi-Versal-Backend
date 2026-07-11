@@ -12,9 +12,24 @@ const allowedOrigins = [
     /^http:\/\/127\.0\.0\.1:\d+$/
 ]
 
+const frontendUrl = process.env.FRONTEND_URL
+
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.some((allowedOrigin) => allowedOrigin.test(origin))) {
+        // allow non-browser (no origin) requests
+        if (!origin) {
+            callback(null, true)
+            return
+        }
+
+        // allow explicit frontend URL from env
+        if (frontendUrl && origin === frontendUrl) {
+            callback(null, true)
+            return
+        }
+
+        // allow localhost during development
+        if (allowedOrigins.some((allowedOrigin) => allowedOrigin.test(origin))) {
             callback(null, true)
             return
         }
