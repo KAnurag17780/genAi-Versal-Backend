@@ -9,7 +9,8 @@ app.use(cookieParser())
 
 const allowedOrigins = [
     /^http:\/\/localhost:\d+$/,
-    /^http:\/\/127\.0\.0\.1:\d+$/
+    /^http:\/\/127\.0\.0\.1:\d+$/,
+    /^https:\/\/gen-ai-versal-frontend.*\.vercel\.app$/
 ]
 
 const frontendUrl = process.env.FRONTEND_URL
@@ -28,7 +29,7 @@ app.use(cors({
             return
         }
 
-        // allow localhost during development
+        // allow localhost and Vercel preview deployments
         if (allowedOrigins.some((allowedOrigin) => allowedOrigin.test(origin))) {
             callback(null, true)
             return
