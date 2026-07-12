@@ -10,7 +10,7 @@ const tokenBlacklistModel = require("../models/blacklist.modle")
  */
 
 async function registerUserController(req,res) {
-
+    try {
     const {username , email , password } = req.body
 
     if(!username||!email||!password)
@@ -64,6 +64,10 @@ async function registerUserController(req,res) {
             email: user.email
         }
     })
+    } catch (error) {
+        console.error("Register error:", error)
+        return res.status(500).json({ message: "Registration failed", error: error.message })
+    }
 }
 
 /**
@@ -73,7 +77,8 @@ async function registerUserController(req,res) {
  */
 
 async function loginUserController(req , res)
-{   
+{
+    try {
     const {email , password} = req.body 
 
     const user = await userModel.findOne({email})
@@ -115,6 +120,10 @@ async function loginUserController(req , res)
             email: user.email
         }
     })
+    } catch (error) {
+        console.error("Login error:", error)
+        return res.status(500).json({ message: "Login failed", error: error.message })
+    }
 }
 
 
@@ -154,6 +163,7 @@ async function logoutUserController(req, res) {
 
 async function getMeController(req,res)
 {
+    try {
     // gets the decoded data from auth.middleware
     const user = await userModel.findById(req.user.id)
 
@@ -166,6 +176,10 @@ async function getMeController(req,res)
             email: user.email
         }
     })
+    } catch (error) {
+        console.error("GetMe error:", error)
+        return res.status(500).json({ message: "Failed to get user", error: error.message })
+    }
 }
 
 
