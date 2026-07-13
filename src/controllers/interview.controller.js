@@ -1,36 +1,3 @@
-// Polyfill browser APIs needed by pdf-parse/pdfjs-dist in serverless environments
-if (typeof globalThis.DOMMatrix === "undefined") {
-    globalThis.DOMMatrix = class DOMMatrix {
-        constructor() {
-            this.a = 1; this.b = 0; this.c = 0; this.d = 1; this.e = 0; this.f = 0;
-            this.m11 = 1; this.m12 = 0; this.m13 = 0; this.m14 = 0;
-            this.m21 = 0; this.m22 = 1; this.m23 = 0; this.m24 = 0;
-            this.m31 = 0; this.m32 = 0; this.m33 = 1; this.m34 = 0;
-            this.m41 = 0; this.m42 = 0; this.m43 = 0; this.m44 = 1;
-        }
-        inverse() { return new DOMMatrix() }
-        multiply() { return new DOMMatrix() }
-        scale() { return new DOMMatrix() }
-        translate() { return new DOMMatrix() }
-        transformPoint(p) { return p }
-        static fromMatrix() { return new DOMMatrix() }
-        static fromFloat64Array() { return new DOMMatrix() }
-        static fromFloat32Array() { return new DOMMatrix() }
-    }
-}
-if (typeof globalThis.Path2D === "undefined") {
-    globalThis.Path2D = class Path2D {
-        constructor() {}
-        moveTo() {}
-        lineTo() {}
-        bezierCurveTo() {}
-        quadraticCurveTo() {}
-        arc() {}
-        closePath() {}
-        rect() {}
-    }
-}
-
 const mongoose = require("mongoose")
 const { generateInterviewReport , generateResumePdf } = require("../services/ai.service")
 const interviewReportModel = require("../models/interviewReport.model")
@@ -48,7 +15,7 @@ async function generateInterviewReportController(req, res) {
 
     try {
         const pdfParse = require("pdf-parse")
-        const parsedResume = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
+        const parsedResume = await pdfParse(req.file.buffer)
         const resumeContent = parsedResume.text || ""
         const rawJobDescription = req.body.jobDescription || req.body.jobDescripition || ""
         const selfDescription = req.body.selfDescription || ""
