@@ -178,7 +178,7 @@ ${safeJobDescription}`
         contents: prompt,
         config : {
             temperature: 0.2,
-            maxOutputTokens: 2000,
+            maxOutputTokens: 8000,
             responseMimeType : "application/json",
             responseSchema : zodToJsonSchema(interviewReportSchema),
         }
